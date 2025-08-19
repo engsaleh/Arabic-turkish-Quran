@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- استخدام معلومات السورة في عنوان الصفحة -->
+    <title>
+      {{ surah_info.name_simple }} ({{ surah_info.name_arabic }}) - القرآن
+      الكريم
+    </title>
+
+    <!-- 1. استيراد خط "Amiri" الجميل للغة العربية من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- 2. نسخ الأنماط من صفحة الفهرس مع إضافة أنماط جديدة للصفحة الحالية -->
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        padding: 20px;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto; /* توسيط المحتوى */
+      }
+      h1,
+      h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .error {
+        color: #d9534f;
+        background-color: #f2dede;
+        border: 1px solid #ebccd1;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      a {
+        text-decoration: none;
+        color: #0275d8;
+      }
+      .back-link {
+        display: block;
+        margin-bottom: 25px;
+        font-size: 1.1em;
+      }
+
+      /* 3. تصميم "بطاقة الآية" لتكون مشابهة لبطاقة السورة في الفهرس */
+      .verse-block {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      /* 4. تطبيق الخط العربي الجميل على نص الآية وتكبيره */
+      .arabic-text {
+        font-family: "Amiri", serif; /* استخدام الخط الجديد */
+        font-size: 1.8em; /* حجم أكبر للوضوح */
+        line-height: 1.8;
+        margin-bottom: 15px;
+      }
+
+      .translations-list {
+        list-style-type: none;
+        padding-right: 20px;
+        border-right: 2px solid #eee; /* خط فاصل بجانب الترجمات */
+        font-size: 0.9em;
+        color: #555;
+        margin-bottom: 15px;
+      }
+      .translations-list li {
+        padding: 5px 0;
+        direction: ltr; /* ضمان عرض الترجمات التركية من اليسار لليمين */
+        text-align: right;
+      }
+
+      /* 5. تمييز الترجمة المُحسّنة بالذكاء الاصطناعي */
+      .ai-translation {
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #e8f5e9; /* خلفية خضراء فاتحة */
+        border-radius: 5px;
+        border-right: 4px solid #4caf50; /* خط أخضر مميز */
+      }
+      .ai-translation h4 {
+        margin-top: 0;
+        color: #2e7d32;
+      }
+      .ai-translation p {
+        font-size: 1.1em;
+        font-weight: 500;
+        margin-bottom: 0;
+        direction: ltr;
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- زر للرجوع إلى صفحة الفهرس الرئيسية -->
+      <a href="/" class="back-link">→ العودة إلى الفهرس</a>
+
+      <!-- عرض عنوان السورة -->
+      <h2>{{ surah_info.name_simple }} ({{ surah_info.name_arabic }})</h2>
+
+      <!-- عرض رسالة الخطأ إذا وجدت -->
+      {% if error %}
+      <div class="error"><strong>خطأ:</strong> {{ error }}</div>
+      {% endif %}
+
+      <!-- عرض الآيات -->
+      {% for item in items %}
+      <div class="verse-block">
+        <!-- النص العربي للآية مع رقمه -->
+        <p class="arabic-text">{{ item.arabic_text }} ۝</p>
+
+        <!-- الترجمات التركية الخمس الأصلية -->
+        <h5>الترجمات المرجعية:</h5>
+        <ul class="translations-list">
+          {% for t in item.turkish_versions %}
+          <li>{{ t }}</li>
+          {% endfor %}
+        </ul>
+
+        <!-- الترجمة الهجينة والمحسنة من الذكاء الاصطناعي -->
+        <div class="ai-translation">
+          <h4>الترجمة المحسّنة (AI):</h4>
+          <p><strong>{{ item.hybrid }}</strong></p>
+        </div>
+      </div>
+      {% else %}
+      <!-- رسالة في حال عدم وجود آيات (أو في حالة خطأ التحميل) -->
+      <div class="verse-block">
+        <p>لم يتم تحميل الآيات. قد تكون هناك مشكلة في الاتصال بالـ API.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
